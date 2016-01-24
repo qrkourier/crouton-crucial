@@ -67,7 +67,7 @@ funcBackup() {
   
   # backup the specified chroot; edit-chroot will not guess the name, so it
   # must be given in the runcom file 
-  /bin/sh $CRPATH/bin/edit-chroot -c $CRPATH/chroots -bf $THISTARBALL ${CRNAME:?} 2>/dev/null || \
+  /bin/sh $CRPATH/bin/edit-chroot -c $CRPATH/chroots -bf $THISTARBALL ${CRNAME:?} 2>/dev/null </dev/null || \
     funcExit "
       Crucial was unable to back up the chroot. You can run the command yourself to troubleshoot:
       $ sudo /bin/sh $CRPATH/bin/edit-chroot -c $CRPATH/chroots -bf $THISTARBALL ${CRNAME:?}"
@@ -183,7 +183,7 @@ STARTUPOPTS="-c $CRPATH/chroots -n ${CRNAME:?} $CRSTARTCMD"
 if [[ -n "$KEEPAWAKE" ]];then
   /bin/sh $THISWORKINGDIR/keepawake.sh $STARTUPOPTS
 else
-  /bin/sh $CRPATH/bin/enter-chroot $STARTUPOPTS 2>/dev/null || \
+  /bin/sh $CRPATH/bin/enter-chroot $STARTUPOPTS 2>/dev/null </dev/null || \
     funcExit "
       Crucial was unable to start up the chroot. You can run the command yourself to troubleshoot:
       $ sudo /bin/sh $CRPATH/bin/enter-chroot $STARTUPOPTS"
