@@ -9,8 +9,8 @@ A little extra help for using [Crouton](https://github.com/dnschneid/crouton), t
 
 ## Files
 * crucial.rc: annotated runcom file for Crouton environments; required by crucial.sh
-* crucial.sh: a helper script that launches a Crouton instance, optionally first backing up or updating or both
-* keepawake.sh: a wrapper script that disables power management features before invoking enter-chroot
+* crucial.sh: starts a Crouton chroot; optionally first installing, backing up, or updating
+* keepawake.sh: a wrapper script optionally called by crucial.sh that disables suspend before enter-chroot
 
 ## Bootstrapping
 * download and unpack [the zip file](https://github.com/qrkourier/crouton-crucial/archive/master.zip)
