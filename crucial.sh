@@ -67,10 +67,10 @@ funcBackup() {
   
   # backup the specified chroot; edit-chroot will not guess the name, so it
   # must be given in the runcom file 
-  $CRPATH/bin/edit-chroot -c $CRPATH/chroots -bf $THISTARBALL ${CRNAME:?} 2>/dev/null || \
+  /bin/sh $CRPATH/bin/edit-chroot -c $CRPATH/chroots -bf $THISTARBALL ${CRNAME:?} 2>/dev/null || \
     funcExit "
       Crucial was unable to back up the chroot. You can run the command yourself to troubleshoot:
-      $ sudo $CRPATH/bin/edit-chroot -c $CRPATH/chroots -bf $THISTARBALL ${CRNAME:?}"
+      $ sudo /bin/sh $CRPATH/bin/edit-chroot -c $CRPATH/chroots -bf $THISTARBALL ${CRNAME:?}"
  
   # report!
   printf '\nFinished backing up %s to %s\n' $(du -h $THISTARBALL)
