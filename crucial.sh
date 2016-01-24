@@ -49,10 +49,10 @@ funcBootstrap() {
 }
 
 funcInstall() {
-  /bin/sh $THISWORKINGDIR/crouton -p $CRPATH -t ${CRTARGETS:?} -r $1 -n ${CRNAME:?} 2>/dev/null || \
+  /bin/sh $THISWORKINGDIR/crouton -p $CRPATH -t ${CRTARGETS:?} -r ${CRRELEASE:?} -n ${CRNAME:?} 2>/dev/null || \
     funcExit \
       "Crucial was unable to install the chroot. You can run the command yourself to troubleshoot:
-      $ sudo /bin/sh $THISWORKINGDIR/crouton -p $CRPATH -t ${CRTARGETS:?} -r $1 -n ${CRNAME:?}"
+      $ sudo /bin/sh $THISWORKINGDIR/crouton -p $CRPATH -t ${CRTARGETS:?} -r ${CRRELEASE:?} -n ${CRNAME:?}"
 }
 
 funcBackup() {
@@ -147,7 +147,7 @@ set +o xtrace
 
 # assign default values if not defined in rc file
 : ${CRPATH:=/usr/local}
-: ${CRNAME:=precise}
+: ${CRNAME:=$CRRELEASE}
 
 # bootstrap?
 [[ -z "$BOOTSTRAPFIRST" ]] || { 
@@ -159,10 +159,16 @@ set +o xtrace
   funcInstall
 }
 
-# test for Crouton
-if ! [[ -s $THISWORKINGDIR/crouton && -d $CRPATH/chroots/${CRNAME:?} ]];then
+# test for the chroot
+if ! [[ -d $CRPATH/chroots/${CRNAME:?} ]];then
   funcExit \
-    "Failed to find Crouton, please run 'sudo bash ./crucial.sh -i [RELEASE]' to bootstrap"
+    "Failed to find the chroot, you can 'sudo bash crucial.sh -i' to install one"
+fi
+
+# test for Crouton
+if ! [[ -s $THISWORKINGDIR/crouton ]];then
+  funcExit \
+    "Failed to find Crouton, you can 'sudo bash crucial.sh -s' to install it in $THISWORKINGDIR"
 fi
 
 # backup?
@@ -171,7 +177,7 @@ fi
 # update?
 [[ -z "$UPDATEFIRST" ]] || { funcUpdate; }
 
-# launch
+# enter
 STARTUPOPTS="-c $CRPATH/chroots -n ${CRNAME:?} $CRSTARTCMD"
 if [[ -n "$KEEPAWAKE" ]];then
   /bin/sh $THISWORKINGDIR/keepawake.sh $STARTUPOPTS
