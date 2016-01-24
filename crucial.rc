@@ -4,20 +4,20 @@
 #
 
 #
-# the dir containing the Crouton chroot instance described by this runcom file; 
-CRCHROOTDIR=/usr/local/chroots
+# the dir containing the Crouton chroot instance described by this runcom file 
+#CRCHROOTDIR=/usr/local/chroots
 
 #
 # the name of the Crouton instance
-CRNAME=precise
+#CRNAME=precise
 
 #
 # arguments to crouton -t are comma-separated package groups; set this variable
-# to "list" or execute "sh ./crouton -t list" to display
-# available targets; targets are additive and there is not an automatic way to
-# uninstall the packages they represent
+# to "list" or execute "sh ./crouton -t list" to print candidates; targets are
+# additive and there is not an automatic way to uninstall the packages they
+# represent
 #
-## for Chromebook Pixel add "touch"
+## for Chromebook Pixel include "touch"
 #
 ## for X in a Chrome window, audio playback via CRAS, 2-way clipboard sync
 CRTARGETS=xfce-desktop,cli-extra,keyboard,xiwi
@@ -46,4 +46,9 @@ CRPOLICY=4
 ## if startxiwi then optionally followed by the command you would like to run
 ## in a window like "startxiwi -b xterm"
 CRSTARTCMD=startxfce4
+
+#
+# Crucial will bootstrap Crouton from this URL unless it already exists in the
+# installation dir
+CRINSTALLER="https://raw.githubusercontent.com/dnschneid/crouton/master/installer/crouton"
 

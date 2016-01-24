@@ -20,19 +20,19 @@ Usage:
   $ sudo bash ./crucial.sh [OPTIONS]
 
 Summary:
-  Apply runcom and invoke enter-chroot, optionally first doing any of
-  bootstrap, backup, or update
+  Invoke enter-chroot with the parameters from the runcom file for that
+  instance; optionally first doing install, backup, update; or all three
 
 Options:
-    -a          awake: disable power management before startup
-    -b          invoke edit-chroot to backup before startup
-    -c FILE     override default runcom file: ./crucial.rc
-    -i RELEASE  invoke crouton to install RELEASE or "list" 
-    -u          invoke crouton to update the chroot before startup
+    -a          keep awake: disable power management 
+    -b          save a backup and enforce the retention policy
+    -i RELEASE  install Crouton and RELEASE or 
+                substitute "list" to print candidates
+    -r FILE     override ./crucial.rc
+    -u          update the chroot
 
 Hints:
-  # switch to the Crucial installation directory to run it, e.g.
-  # copy the sample runcom file and configure the copy for your instance
+  # make a copy of crucial.rc for each Crouton chroot 
   # Crucial can manage a new or pre-existing Crouton instance
 
 Examples:
@@ -48,8 +48,22 @@ Examples:
   exit 1
 }
 
+funcBootstrap() {
+  if ! { umask 022 && \
+    curl -# -L --connect-timeout 60 --max-time 300 --retry 2 "$CRINSTALLER" -o \
+      "$THISWORKINGDIR/crouton"; }; then
+    funcUsage "Failed to bootstrap Crouton."
+  fi
+}
+
 funcInstall() {
-  bash ./crouton -p ${CRCHROOTDIR%/chroots} -t ${CRTARGETS:?} -r $1 $THISNAMEOPT
+  if ! [[ -s $THISWORKINGDIR/crouton ]];then
+    funcBootstrap
+  fi
+  bash $THISWORKINGDIR/crouton -p ${CRCHROOTDIR%/chroots} -t ${CRTARGETS:?} -r $1 -n ${CRNAME:?} 2>/dev/null || \
+    funcUsage \
+      "Crucial was unable to install the chroot. You can run the command yourself to troubleshoot:
+      $ sudo bash $THISWORKINGDIR/crouton -p ${CRCHROOTDIR%/chroots} -t ${CRTARGETS:?} -r $1 -n ${CRNAME:?}"
 }
 
 funcBackup() {
@@ -63,7 +77,10 @@ funcBackup() {
   
   # backup the specified chroot; edit-chroot will not guess the name, so it
   # must be given in the runcom file 
-  edit-chroot -c $CRCHROOTDIR -bf $THISTARBALL ${CRNAME:?}
+  edit-chroot -c $CRCHROOTDIR -bf $THISTARBALL ${CRNAME:?} 2>/dev/null || \
+    funcUsage "
+      Crucial was unable to back up the chroot. You can run the command yourself to troubleshoot:
+      $ sudo edit-chroot -c $CRCHROOTDIR -bf $THISTARBALL ${CRNAME:?}"
  
   # report!
   printf '\nFinished backing up %s to %s\n' $(du -h $THISTARBALL)
@@ -75,12 +92,19 @@ funcBackup() {
 }
 
 funcUpdate() {
-  # ./crouton expects the -p path to contain a "chroots" dir
+  # crouton expects the -p path to contain a "chroots" dir
   # and searches it for a matching CRNAME
-  bash ./crouton -u -p ${CRCHROOTDIR%/chroots} -n ${CRNAME:?}
+  bash $THISWORKINGDIR/crouton -u -p ${CRCHROOTDIR%/chroots} -n ${CRNAME:?} 2>/dev/null || \
+  funcUsage "
+    Crucial was unable to update the chroot. You can run the command yourself to troubleshoot:
+    $ sudo bash $THISWORKINGDIR/crouton -u -p ${CRCHROOTDIR%/chroots} -n ${CRNAME:?}"
 }
 
-while getopts ":abc:hi:u" THISOPT;do
+#
+##
+#
+
+while getopts ":abhi:r:u" THISOPT;do
   case $THISOPT in
     a)
       KEEPAWAKE=true
@@ -88,14 +112,14 @@ while getopts ":abc:hi:u" THISOPT;do
     b)
       BACKUPFIRST=true
       ;;
-    c)
-      THISRCFILE=$OPTARG
-      ;;
     h)
       funcUsage
       ;;
     i)
       INSTALLFIRST=$OPTARG
+      ;;
+    r)
+      THISRCFILE=$OPTARG
       ;;
     u)
       UPDATEFIRST=true
@@ -110,27 +134,36 @@ done
 ##
 #
 
+# derive the Crucial installation dir
+THISWORKINGDIR="$(dirname $0)"
+
 # require a runcom file that exists and is not empty and is not this file and
 # is named ending *rc; if not defined then look for the sample runcom
-[[ -s "${THISRCFILE:=./crucial.rc}" && \
+[[ -s "${THISRCFILE:=$THISWORKINGDIR/crucial.rc}" && \
   "$(readlink -f $THISRCFILE)" != "$(readlink -f $0)" && \
   "$THISRCFILE" =~ rc$ ]] || { 
     funcUsage "$THISRCFILE is not a valid runcom file"; 
 }
+set -o xtrace
 source $THISRCFILE
+set +o xtrace
 
 #
 ##
 #
 
-# if CRNAME is not defined in the runcom then let THISNAMEOPT remain empty;
-# else assign 
-THISNAMEOPT=${CRNAME:+"-n $CRNAME"}
-echo "The Crouton chroots dir is ${CRCHROOTDIR:=/usr/local/chroots}"
-echo "The name of this Crouton instance is ${CRNAME:=precise}"
+# assign default values if not defined in rc file
+: ${CRCHROOTDIR:=/usr/local/chroots}
+: ${CRNAME:=precise}
 
 # install?
 [[ -z "$INSTALLFIRST" ]] || { funcInstall $INSTALLFIRST; }
+
+# test for Crouton
+if ! [[ -s $THISWORKINGDIR/crouton && -d $CRCHROOTDIR/${CRNAME:?} ]];then
+  funcUsage \
+    "Failed to find Crouton, please run 'sudo bash ./crucial.sh -i [RELEASE]' to bootstrap"
+fi
 
 # backup?
 [[ -z "$BACKUPFIRST" ]] || { funcBackup; }
@@ -139,10 +172,13 @@ echo "The name of this Crouton instance is ${CRNAME:=precise}"
 [[ -z "$UPDATEFIRST" ]] || { funcUpdate; }
 
 # launch
-STARTUPOPTS="-c $CRCHROOTDIR $THISNAMEOPT $CRSTARTCMD"
+STARTUPOPTS="-c $CRCHROOTDIR -n ${CRNAME:?} $CRSTARTCMD"
 if [[ -n "$KEEPAWAKE" ]];then
-  bash ./keepawake.sh $STARTUPOPTS
+  bash $THISWORKINGDIR/keepawake.sh $STARTUPOPTS
 else
-  bash enter-chroot $STARTUPOPTS
+  bash /usr/local/bin/enter-chroot $STARTUPOPTS 2>/dev/null || \
+    funcUsage "
+      Crucial was unable to start up the chroot. You can run the command yourself to troubleshoot:
+      $ sudo bash /usr/local/bin/enter-chroot $STARTUPOPTS"
 fi
 
