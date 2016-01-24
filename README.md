@@ -9,7 +9,7 @@ A little extra help for using [Crouton](https://github.com/dnschneid/crouton), t
 
 ## Prerequisites
 * at least one working Crouton instance installed on Chromium OS or Chrome OS,
-* the ability to open a crosh shell as cronos and run-as root (press ctrl-alt-t, execute "shell", execute "sudo -l")
+* the ability to open a crosh shell as chronos and run-as root (press ctrl-alt-t, execute "shell", execute "sudo -l")
 
 ## Files
 * crucial.rc: a commented runcom file for Crouton environments; required by crucial.sh;
