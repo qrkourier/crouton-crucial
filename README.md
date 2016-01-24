@@ -2,16 +2,17 @@
 
 A little extra help for using [Crouton](https://github.com/dnschneid/crouton), the Chromium OS universal chroot environment, or, a way to run a few different flavors of Linux in shared kernel space with Chromium OS or Chrome OS.
 
-The advantages of Crucial are
+## Advantages
 * one runcom file per Crouton instance makes it easy to keep track of their respective attributes, 
 * easily limit the maximum number of backups for each Crouton instance,
 * disable power management in the OS before starting up (addresses the problem of the OS re-mounting external storage devices as described in [this issue](https://github.com/dnschneid/crouton/issues/1936))
 
+## Files
 * crucial.rc: a commented runcom file for Crouton environments; required by crucial.sh;
 * crucial.sh: a helper script that launches a Crouton instance, optionally first backing up or updating or both;
 
+## Usage
 ```
-Usage: 
   sudo bash ./crucial.sh [OPTIONS]
 
     -a        disable Chromium OS power management before startup
