@@ -4,28 +4,32 @@
 #
 
 #
-# the dir containing the Crouton chroot instance described by this runcom file 
-#CRCHROOTDIR=/usr/local/chroots
-
-#
 # the name of the Crouton instance
-#CRNAME=precise
+CRNAME=trusty
 
 #
-# arguments to crouton -t are comma-separated package groups; set this variable
-# to "list" or execute "sh ./crouton -t list" to print candidates; targets are
-# additive and there is not an automatic way to uninstall the packages they
-# represent
+# the Linux release installed in the chroot
+CRNAME=trusty
+
 #
-## for Chromebook Pixel include "touch"
+# the Crouton path for where everything is stored; e.g. "chroots/", "bin/" 
+#CRPATH=/usr/local  # default
+CRPATH=/media/removable/PRO32G
+
+#
+# arguments to crouton -t are comma-separated package groups; execute 
+# "sh ./crouton -t list" to print candidates; targets are additive and there 
+# is not an automatic way to uninstall the packages they represent
+#
+## for Chromebook Pixel add "touch"
 #
 ## for X in a Chrome window, audio playback via CRAS, 2-way clipboard sync
 CRTARGETS=xfce-desktop,cli-extra,keyboard,xiwi
 
 #
 # where to stash the backup tarballs created by edit-chroot
-#CRBACKUPS=/media/removable/USB128
-CRBACKUPS=~chronos/Downloads
+CRBACKUPS=/media/removable/KX1T/backup
+#CRBACKUPS=~chronos/Downloads
 
 #
 # a crude backup retention policy; i.e.
