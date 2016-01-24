@@ -1,0 +1,49 @@
+#
+# title           :Crucial runcom file
+# description     :a runcom file is required by Crucial for each Crouton instance
+#
+
+#
+# the dir containing the Crouton chroot instance described by this runcom file; 
+CRCHROOTDIR=/usr/local/chroots
+
+#
+# the name of the Crouton instance
+CRNAME=precise
+
+#
+# arguments to crouton -t are comma-separated package groups; set this variable
+# to "list" or execute "sh ./crouton -t list" to display
+# available targets; targets are additive and there is not an automatic way to
+# uninstall the packages they represent
+#
+## for Chromebook Pixel add "touch"
+#
+## for X in a Chrome window, audio playback via CRAS, 2-way clipboard sync
+CRTARGETS=xfce-desktop,cli-extra,keyboard,xiwi
+
+#
+# where to stash the backup tarballs created by edit-chroot
+#CRBACKUPS=/media/removable/USB128
+CRBACKUPS=~chronos/Downloads
+
+#
+# a crude backup retention policy; i.e.
+# POLICY: MAX BACKUPS
+#   2:      16
+#   4:      8
+#   10:     4
+#   20:     2
+#   32:     1
+## if policy number 4 then retain at most 8 backups
+CRPOLICY=4
+
+#
+# the start command is invoked after setting up your environment and startcli
+# is assumed if not defined; it's one or none of the following and must be installed:
+## startcli, starte17, startgnome, startkde, startlxde, startunity, startxbmc,
+## startxfce4, startxiwi
+## if startxiwi then optionally followed by the command you would like to run
+## in a window like "startxiwi -b xterm"
+CRSTARTCMD=startxfce4
+
