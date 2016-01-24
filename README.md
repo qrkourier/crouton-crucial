@@ -1,4 +1,4 @@
-# crouton-scripts
+# crouton-crucial
 
 A little extra help for using [Crouton](https://github.com/dnschneid/crouton), the Chromium OS universal chroot environment, or, a way to run a few different flavors of Linux in shared kernel space with Chromium OS or Chrome OS.
 
@@ -9,7 +9,8 @@ The advantages of Crucial are
 
 * crucial.rc: a commented runcom file for Crouton environments; required by crucial.sh;
 * crucial.sh: a helper script that launches a Crouton instance, optionally first backing up or updating or both;
- 
+
+```
 Usage: 
   sudo bash ./crucial.sh [OPTIONS]
 
@@ -17,4 +18,4 @@ Usage:
     -b        perform a backup and give a brief report before startup
     -c FILE   override default runcome location ./crucial.rc
     -u        perform a Crouton chroot update before startup
-
+```
