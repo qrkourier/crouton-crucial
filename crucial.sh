@@ -49,6 +49,7 @@ funcBootstrap() {
 }
 
 funcInstall() {
+  echo "Downloading and installing the chroot. This will take a while."
   /bin/sh $THISWORKINGDIR/crouton -p $CRPATH -t ${CRTARGETS:?} -r ${CRRELEASE:?} -n ${CRNAME:?} 2>/dev/null || \
     funcExit \
       "Crucial was unable to install the chroot. You can run the command yourself to troubleshoot:
