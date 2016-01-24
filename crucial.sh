@@ -32,21 +32,14 @@ Options:
 
 Hints:
   # switch to the Crucial installation directory to run it, e.g.
-    $ cd /media/removable/USB32/crouton-crucial
-
-  # copy the sample runcom file and configure the copy for your instance;
-  # configuration options are described in-line
-    $ cp crucial.rc precise.rc
-
-  # Crucial can manage an existing Crouton instance; just ensure the runcom
-  # file reflects its attributes
+  # copy the sample runcom file and configure the copy for your instance
+  # Crucial can manage a new or pre-existing Crouton instance
 
 Examples:
   # Crucial can install a Crouton instance described by a runcom file
     $ sudo bash ./crucial.sh -c ./precise.rc -i precise
 
-  # disable idle and lid suspend and start up the only installed
-  # instance; this implies '-c ./crucial.rc' 
+  # disable idle and lid suspend and start up; implies '-c ./crucial.rc' 
     $ sudo bash ./crucial.sh -a
 
   # backup, update, and start up an instance 
@@ -56,7 +49,7 @@ Examples:
 }
 
 funcInstall() {
-  bash ./crouton -p ${CRCHROOTDIR%/chroots} -t $CRTARGETS -r $1 $THISNAMEOPT
+  bash ./crouton -p ${CRCHROOTDIR%/chroots} -t ${CRTARGETS:?} -r $1 $THISNAMEOPT
 }
 
 funcBackup() {
