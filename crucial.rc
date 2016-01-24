@@ -4,32 +4,30 @@
 #
 
 #
-# the name of the Crouton instance
-CRNAME=trusty
+# the name of the Crouton instance; if not defined it will be set to match the 
+# Linux release name
+#CRNAME=trusty
 
 #
-# the Linux release installed in the chroot
-CRNAME=trusty
+# the Linux release installed in the chroot; execute
+# "sh ~/Downloads/crouton-crucial-master/crouton -r list" to print candidates
+CRRELEASE=trusty
 
 #
 # the Crouton path for where everything is stored; e.g. "chroots/", "bin/" 
-#CRPATH=/usr/local  # default
-CRPATH=/media/removable/PRO32G
+CRPATH=/usr/local  # default
 
 #
 # arguments to crouton -t are comma-separated package groups; execute 
-# "sh ./crouton -t list" to print candidates; targets are additive and there 
-# is not an automatic way to uninstall the packages they represent
-#
-## for Chromebook Pixel add "touch"
-#
-## for X in a Chrome window, audio playback via CRAS, 2-way clipboard sync
+# "sh ~/Downloads/crouton-crucial-master/crouton -t list" to print candidates; 
+# targets are additive and there is not an automatic way to remove them;
+## for Chromebook Pixel add "touch";
+## for X in a Chrome window, audio playback via CRAS, 2-way clipboard sync;
 CRTARGETS=xfce-desktop,cli-extra,keyboard,xiwi
 
 #
 # where to stash the backup tarballs created by edit-chroot
-CRBACKUPS=/media/removable/KX1T/backup
-#CRBACKUPS=~chronos/Downloads
+CRBACKUPS=~chronos/Downloads # default
 
 #
 # a crude backup retention policy; i.e.
