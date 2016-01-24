@@ -16,6 +16,6 @@ Usage:
 
     -a        disable Chromium OS power management before startup
     -b        perform a backup and give a brief report before startup
-    -c FILE   override default runcome location ./crucial.rc
+    -c FILE   override default runcom location ./crucial.rc
     -u        perform a Crouton chroot update before startup
 ```
