@@ -16,7 +16,7 @@ A little extra help for using [Crouton](https://github.com/dnschneid/crouton), t
 * download and unpack [the zip file](https://github.com/qrkourier/crouton-crucial/archive/master.zip)
 * edit crucial.rc to configure a new or existing chroot
 * press ctrl-alt-t to open a crosh terminal
-* invoke bash
+* invoke bash as root (requires Chromebook Developer Mode)
 ```
 crosh> shell
 ```
