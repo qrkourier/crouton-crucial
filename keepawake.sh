@@ -16,7 +16,7 @@ else
   start powerd
   echo "Disabled idle/lid suspend"
 
-  enter-chroot $@
+  sh $CRPATH/bin/enter-chroot $@
 
   rm -f /var/lib/power_manager/disable_idle_suspend
   rm -f /var/lib/power_manager/use_lid

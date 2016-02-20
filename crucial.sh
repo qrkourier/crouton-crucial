@@ -181,6 +181,7 @@ fi
 # enter
 STARTUPOPTS="-c $CRPATH/chroots -n ${CRNAME:?} $CRSTARTCMD"
 if [[ -n "$KEEPAWAKE" ]];then
+  export CRPATH
   exec /bin/sh $THISWORKINGDIR/keepawake.sh $STARTUPOPTS
 else
   exec /bin/sh $CRPATH/bin/enter-chroot $STARTUPOPTS
