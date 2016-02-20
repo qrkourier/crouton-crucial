@@ -8,7 +8,7 @@ A little extra help for using [Crouton](https://github.com/dnschneid/crouton), t
 * disable power management in the OS before starting up to address the problem of the OS having USB persist disabled
 
 ## Files
-* crucial.rc: annotated runcom file for Crouton environments; required by crucial.sh
+* crucial.rc: annotated runcom file for Crouton environments; required by crucial.sh; edit this first
 * crucial.sh: starts a Crouton chroot; optionally first installing, backing up, or updating
 * keepawake.sh: a wrapper script optionally called by crucial.sh that disables suspend before enter-chroot
 
