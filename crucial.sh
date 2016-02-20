@@ -181,11 +181,8 @@ fi
 # enter
 STARTUPOPTS="-c $CRPATH/chroots -n ${CRNAME:?} $CRSTARTCMD"
 if [[ -n "$KEEPAWAKE" ]];then
-  /bin/sh $THISWORKINGDIR/keepawake.sh $STARTUPOPTS
+  exec /bin/sh $THISWORKINGDIR/keepawake.sh $STARTUPOPTS
 else
-  /bin/sh $CRPATH/bin/enter-chroot $STARTUPOPTS 2>/dev/null </dev/null || \
-    funcExit "
-      Crucial was unable to start up the chroot. You can run the command yourself to troubleshoot:
-      $ sudo /bin/sh $CRPATH/bin/enter-chroot $STARTUPOPTS"
+  exec /bin/sh $CRPATH/bin/enter-chroot $STARTUPOPTS
 fi
 
