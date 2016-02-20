@@ -20,7 +20,7 @@ A little extra help for using [Crouton](https://github.com/dnschneid/crouton), t
 ```
 crosh> shell
 ```
-* run Crucial
+* run Crucial and bootstrap Crouton
 ```
 $ sudo bash ~/Downloads/crouton-crucial-master/crucial.sh -s
 ```
