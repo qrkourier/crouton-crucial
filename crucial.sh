@@ -26,10 +26,21 @@ Summary:
 Options:
     -a          keep awake: disable power management 
     -b          save a backup and enforce the retention policy
+    -c          override the start command
     -i          install the chroot; implies '-s'
     -r FILE     override ./crucial.rc
     -s          bootstrap Crouton installer
     -u          update the chroot
+
+Examples:
+  Disable Chrome power management and enter the first chroot and run bash in the crosh shell tab
+  $ sudo bash ./crucial.sh -ac bash
+
+  Enter the first chroot and run a GUI terminal in a Chrome tab 
+  $ sudo bash ./crucial.sh -c "xiwi -T xfce4-terminal"
+
+  Enter the first chroot and run a GUI desktop in a Chrome tab 
+  $ sudo bash ./crucial.sh -c "xiwi -T startxfce4"
 "
   exit 1
 }
@@ -94,13 +105,16 @@ funcUpdate() {
 ##
 #
 
-while getopts ":abhir:su" THISOPT;do
+while getopts ":abc:hir:su" THISOPT;do
   case $THISOPT in
     a)
       KEEPAWAKE=true
       ;;
     b)
       BACKUPFIRST=true
+      ;;
+    c)
+      CRRUNCMD="$OPTARG"
       ;;
     h)
       funcExit
@@ -150,6 +164,9 @@ set +o xtrace
 : ${CRPATH:=/usr/local}
 : ${CRNAME:=$CRRELEASE}
 
+# optionally override the rc file
+: ${CRRUNCMD:=$CRSTARTCMD}
+
 # bootstrap?
 [[ -z "$BOOTSTRAPFIRST" ]] || { 
   funcBootstrap
@@ -179,7 +196,7 @@ fi
 [[ -z "$UPDATEFIRST" ]] || { funcUpdate; }
 
 # enter
-STARTUPOPTS="-c $CRPATH/chroots -n ${CRNAME:?} $CRSTARTCMD"
+STARTUPOPTS="-c $CRPATH/chroots -n ${CRNAME:?} $CRRUNCMD"
 if [[ -n "$KEEPAWAKE" ]];then
   export CRPATH
   exec /bin/sh $THISWORKINGDIR/keepawake.sh $STARTUPOPTS
