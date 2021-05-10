@@ -197,6 +197,8 @@ fi
 
 # enter
 STARTUPOPTS="-c $CRPATH/chroots -n ${CRNAME:?} $CRRUNCMD"
+echo "Changing $CRPATH to exec"
+mount -o remount,exec,symfollow $CRPATH
 if [[ -n "$KEEPAWAKE" ]];then
   export CRPATH
   exec /bin/sh $THISWORKINGDIR/keepawake.sh $STARTUPOPTS
