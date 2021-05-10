@@ -54,3 +54,5 @@ CRSTARTCMD=startxfce4
 # installation dir
 CRINSTALLER="https://raw.githubusercontent.com/dnschneid/crouton/master/installer/crouton"
 
+#Working Dir change
+THISWORKINGDIR="/usr/local/bin"
